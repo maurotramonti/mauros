@@ -15,6 +15,16 @@ static size_t terminal_column;
 static uint8_t terminal_color;
 static uint16_t* terminal_buffer;
 
+size_t terminal_get_coord(int coord) {
+	if (coord == 0) return terminal_column;
+	else return terminal_row;
+}
+
+void terminal_set_coord(int x, int y) {
+	terminal_column = x;
+	terminal_row = y;
+}
+
 void terminal_initialize(void) {
 	terminal_row = 0;
 	terminal_column = 0;

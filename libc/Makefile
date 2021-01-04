@@ -49,7 +49,12 @@ cursor/disable_cursor.o \
 cursor/update_cursor.o \
 keyboard/init_keyboard.o \
 sys/handler/cli_keyboard_handler.o \
+sys/handler/timer_handler.o \
 shell/sh_run.o \
+debug/put_ok.o \
+debug/put_fail.o \
+debug/put_info.o \
+debug/put_dbg.o \
 
 
 HOSTEDOBJS=\

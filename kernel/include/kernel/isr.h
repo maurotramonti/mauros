@@ -1,9 +1,9 @@
 #ifndef ISR_H
-#define ISR_H
+#define ISR_H 1
 
 #include <stdint.h>
 
-/* ISRs reserved for CPU exceptions */
+
 extern void isr0();
 extern void isr1();
 extern void isr2();
@@ -85,11 +85,18 @@ typedef struct {
    uint32_t eip, cs, eflags, esp, ss; /* Pushed by the processor automatically */
 } registers_t;
 
-void isr_install();
-void isr_handler(registers_t *r);
-void irq_install();
+
 
 typedef void (*isr_t)(registers_t*);
 void register_interrupt_handler(uint8_t n, isr_t handler);
+
+void isr_install();
+void isr_handler(registers_t *r);
+void irq_handler(registers_t *r);
+void irq_install();
+
+
+
+
 
 #endif

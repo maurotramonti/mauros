@@ -1,12 +1,14 @@
 #include <kernel/isr.h>
+#include <debug.h>
 #include <stdio.h>
 #include <string.h>
 #include <keyboard.h>
+#include <kernel/timer.h>
 
 isr_t interrupt_handlers[256];
 
 /* Can't do this with a loop because we need the address
- * of the function names */
+* of the function names */
 void isr_install() {
     set_idt_gate(0, (uint32_t)isr0);
     set_idt_gate(1, (uint32_t)isr1);
@@ -141,6 +143,9 @@ void irq_handler(registers_t *r) {
 void irq_install() {
     /* Enable interruptions */
     asm volatile("sti");
-    /* IRQ1: keyboard */
+    put_info("IRQs are now enabled");
+    init_timer(50);
+    put_info("Timer is enabled and running in background");
     init_keyboard();
+    put_info("Keyboard driver loaded");
 }

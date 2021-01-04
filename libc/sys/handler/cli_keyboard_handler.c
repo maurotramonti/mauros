@@ -1,6 +1,7 @@
 #include <sys/handler.h>
 #include <stdio.h>
 #include <kernel/tty.h>
+#include <kernel/isr.h>
 #include <stddef.h>
 #include <sys/opcode.h>
 #include <string.h>
@@ -9,21 +10,15 @@
 static char kbuffer[256];
 static size_t index = 0;
 
-/*static void clear_buffer() {
-  for (int i = 0; kbuffer[i] != '\0'; i++) kbuffer [i] = '\0';
-}*/
-
 static void enter() {
   putchar('\n');
   if (!strncmp(kbuffer, "VER", index)) sh_run(OP_CODE_VER);
   else if (!strncmp(kbuffer, "CLEAR", index)) sh_run(OP_CODE_CLS);
   else if (!strncmp(kbuffer, "HELP", index)) sh_run(OP_CODE_HLP);
-  else if (!strncmp(kbuffer, "GUI", index)) {
-    sh_run(OP_CODE_GUI);
-    return;
-  }
+  else if (!strncmp(kbuffer, "UPTIME", index)) sh_run(OP_CODE_UPT);
+
   else {
-    printf("Comando sconosciuto: ");
+    printf("Unknown command: ");
     terminal_write(kbuffer, index);
     putchar('\n');
   }

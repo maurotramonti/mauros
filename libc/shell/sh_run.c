@@ -3,12 +3,17 @@
 #include <kernel/tty.h>
 #include <string.h>
 #include <stdio.h>
+#include <debug.h>
+#include <stdint.h>
+#include <sys/handler.h>
 
-const char* version_string = "OS Info: MaurOS alpha, build 03.01.2021";
-const char* help_string = "\nCLEAR:        PULISCE LA CONSOLE\n"
-                          "GUI:          AVVIA L\'INTERFACCIA GRAFICA (ESC PER USCIRE)\n"
-                          "HELP:         MOSTRA QUESTO AIUTO\n"
-                          "VER:          FORNISCE INFORMAZIONI SUL SISTEMA\n";
+const char* version_string = "OS Info: MaurOS alpha, build 04.01.2021";
+const char* help_string = "\nCLEAR:        CLEARS THE SCREEN\n"
+                          "HELP:         SHOWS THIS HELP\n"
+                          "UPTIME:       SHOWS SYSTEM UPTIME"
+                          "VER:          SHOWS VERSION NUMBER AND DATE\n";
+
+unsigned int ticks, seconds;
 
 void sh_run(int opcode) {
   switch(opcode) {
@@ -21,13 +26,14 @@ void sh_run(int opcode) {
     case OP_CODE_HLP:
       printf("%s\n", help_string);
       break;
-    case OP_CODE_GUI:
-      printf("GUI isn't implemented yet.\n");
+    case OP_CODE_UPT:
+      ticks = timer_get_ticks();
+      seconds = ticks / 50;
+      printf("System uptime: %s\n", itoa(seconds));
       break;
     default:
-      printf("OS Error: undefined opcode ");
-      printf(itoa(opcode));
-      putchar('\n');
+      put_fail("OS Error: undefined opcode: ");
+      printf("%s\n", itoa(opcode));
       break;
   }
 }

@@ -33,6 +33,8 @@ kernel/kernel.o \
 kernel/isr.o \
 kernel/idt.o \
 kernel/gdt.o \
+kernel/timer.o \
+
 
 OBJS=\
 $(ARCHDIR)/crti.o \
@@ -71,6 +73,8 @@ $(ARCHDIR)/gdt.o: $(ARCHDIR)/gdt.asm
 
 $(ARCHDIR)/interrupt.o: $(ARCHDIR)/interrupt.asm
 	nasm -felf32 -o $@ $<
+
+
 
 .c.o:
 	$(CC) -MD -c $< -o $@ -std=gnu11 $(CFLAGS) $(CPPFLAGS)
