@@ -4,8 +4,6 @@
 #include <cursor.h>
 #include <kernel/tty.h>
 
-#include "vga.h"
-
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
 static uint16_t* const VGA_MEMORY = (uint16_t*) 0xB8000;
@@ -28,7 +26,7 @@ void terminal_set_coord(int x, int y) {
 void terminal_initialize(void) {
 	terminal_row = 0;
 	terminal_column = 0;
-	terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+	terminal_color = vga_entry_color(VGA_COLOR_WHITE, VGA_COLOR_BLACK);
 	terminal_buffer = VGA_MEMORY;
 	for (size_t y = 0; y < VGA_HEIGHT; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
@@ -85,8 +83,15 @@ void terminal_putchar(char c) {
 		}
 
 		terminal_putentryat(' ', terminal_color, terminal_column, terminal_row);
+		update_cursor(terminal_column, terminal_row);
 		return;
 	}
+
+	if (uc == '\t') {
+		terminal_writestring("    ");
+		return;
+	}
+
 	if (terminal_column == 80) {
 		terminal_putchar('\n');
 	}
@@ -107,3 +112,51 @@ void terminal_write(const char* data, size_t size) {
 void terminal_writestring(const char* data) {
 	terminal_write(data, strlen(data));
 }
+
+void terminal_writestring_color(const char* str, uint8_t color) {
+	uint8_t old_color = terminal_color;
+	terminal_setcolor(vga_entry_color(color, VGA_COLOR_BLACK));
+	terminal_writestring(str);
+	terminal_setcolor(old_color);
+}
+
+/*void monitor_write_hex(uint32_t n)
+{
+    int tmp;
+
+    terminal_writestring("0x");
+
+    char noZeroes = 1;
+
+    int i;
+    for (i = 28; i > 0; i -= 4)
+    {
+        tmp = (n >> i) & 0xF;
+        if (tmp == 0 && noZeroes != 0)
+        {
+            continue;
+        }
+
+        if (tmp >= 0xA)
+        {
+            noZeroes = 0;
+            terminal_putchar (tmp-0xA+'a' );
+        }
+        else
+        {
+            noZeroes = 0;
+            terminal_putchar( tmp+'0' );
+        }
+    }
+
+    tmp = n & 0xF;
+    if (tmp >= 0xA)
+    {
+        terminal_putchar (tmp-0xA+'a');
+    }
+    else
+    {
+        terminal_putchar (tmp+'0');
+    }
+
+}*/

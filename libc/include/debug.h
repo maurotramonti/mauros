@@ -5,5 +5,5 @@ void put_ok(const char* msg);
 void put_fail(const char* msg);
 void put_info(const char* msg);
 void put_dbg(const char* msg);
-
+void put_int(const char* msg);
 #endif

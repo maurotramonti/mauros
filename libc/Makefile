@@ -43,6 +43,7 @@ string/strlen.o \
 string/strcmp.o \
 string/strncmp.o \
 string/strcpy.o \
+string/strncpy.o \
 string/itoa.o \
 cursor/enable_cursor.o \
 cursor/disable_cursor.o \
@@ -55,6 +56,7 @@ debug/put_ok.o \
 debug/put_fail.o \
 debug/put_info.o \
 debug/put_dbg.o \
+debug/put_int.o \
 
 
 HOSTEDOBJS=\

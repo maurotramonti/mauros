@@ -1,8 +1,9 @@
 # Declare constants for the multiboot header.
 .set ALIGN,    1<<0             # align loaded modules on page boundaries
 .set MEMINFO,  1<<1             # provide memory map
-.set FLAGS,    ALIGN | MEMINFO  # this is the Multiboot 'flag' field
+.set FLAGS,    ALIGN | MEMINFO | ALIGN_MODULES  # this is the Multiboot 'flag' field
 .set MAGIC,    0x1BADB002       # 'magic number' lets bootloader find the header
+.set ALIGN_MODULES, 0x00000001
 .set CHECKSUM, -(MAGIC + FLAGS) # checksum of above, to prove we are multiboot
 
 # Declare a header as in the Multiboot Standard.
@@ -25,6 +26,8 @@ stack_top:
 .type _start, @function
 _start:
 	movl $stack_top, %esp
+
+
 
 	# Call the global constructors.
 	call _init

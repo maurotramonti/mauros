@@ -1,5 +1,5 @@
-#ifndef _TIMER_H
-#define _TIMER_H 1
+#ifndef _KERNEL_TIMER_H
+#define _KERNEL_TIMER_H 1
 
 #include <stdint.h>
 

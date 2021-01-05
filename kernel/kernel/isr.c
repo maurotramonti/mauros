@@ -116,9 +116,8 @@ char *exception_messages[] = {
 };
 
 void isr_handler(registers_t *r) {
-    printf("received interrupt: ");
-    printf(itoa(r->int_no));
-    printf("\n");
+    put_int("Received interrupt: ");
+    printf("%s: ", itoa(r->int_no));
     printf(exception_messages[r->int_no]);
     printf("\n");
 }
@@ -143,9 +142,6 @@ void irq_handler(registers_t *r) {
 void irq_install() {
     /* Enable interruptions */
     asm volatile("sti");
-    put_info("IRQs are now enabled");
     init_timer(50);
-    put_info("Timer is enabled and running in background");
     init_keyboard();
-    put_info("Keyboard driver loaded");
 }

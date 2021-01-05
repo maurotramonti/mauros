@@ -3,25 +3,32 @@
 #include <kernel/tty.h>
 #include <kernel/isr.h>
 #include <kernel/gdt.h>
-#include <debug.h>
+#include <string.h>
 
+static void add_version_info(int d, int m, int y) {
+		terminal_set_coord(43, 6);
+		printf("v");
+		terminal_writestring_color(itoa(d), VGA_COLOR_CYAN);
+		printf(".");
+		terminal_writestring_color(itoa(m), VGA_COLOR_GREEN);
+		printf(".");
+		terminal_writestring_color(itoa(y), VGA_COLOR_RED);
+		terminal_writestring_color("-alpha", VGA_COLOR_LIGHT_MAGENTA);
+}
 
 void kernel_main() {
-	const char* mauros_title = " __  __                   ___  ____\n"
-														 "|  \\/  | __ _ _   _ _ __ / _ \\/ ___|\n"
-														 "| |\\/| |/ _` | | | | '__| | | \\___ \\\n"
-														 "| |  | | (_| | |_| | |  | |_| |___) |\n"
-														 "|_|  |_|\\__,_|\\__,_|_|   \\___/|____/\n\n";
+	const char* mauros_title = "\n\t\t\t\t\t __  __                   ___  ____\n"
+														 "\t\t\t\t\t|  \\/  | __ _ _   _ _ __ / _ \\/ ___|\n"
+														 "\t\t\t\t\t| |\\/| |/ _` | | | | '__| | | \\___ \\\n"
+														 "\t\t\t\t\t| |  | | (_| | |_| | |  | |_| |___) |\n"
+														 "\t\t\t\t\t|_|  |_|\\__,_|\\__,_|_|   \\___/|____/\n\n";
 	terminal_initialize();
 	init_gdt();
-
-	put_ok("Initialized GDT");
 	isr_install();
-	put_ok("Initialized ISR");
 	irq_install();
-
 	printf(mauros_title);
-	printf("MaurOS > ");
+	add_version_info(5, 1, 21);
+	printf("\nMaurOS > ");
 
 
 }

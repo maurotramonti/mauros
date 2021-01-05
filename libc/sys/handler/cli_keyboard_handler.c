@@ -2,13 +2,18 @@
 #include <stdio.h>
 #include <kernel/tty.h>
 #include <kernel/isr.h>
-#include <stddef.h>
 #include <sys/opcode.h>
-#include <string.h>
 #include <shell.h>
+#include <string.h>
 
 static char kbuffer[256];
+static char commands_history[128][32];
 static size_t index = 0;
+static size_t history_index = 0;
+static size_t history_lenght = 0;
+static size_t tmp = 0;
+
+static char previous_command[32];
 
 static void enter() {
   putchar('\n');
@@ -16,13 +21,22 @@ static void enter() {
   else if (!strncmp(kbuffer, "CLEAR", index)) sh_run(OP_CODE_CLS);
   else if (!strncmp(kbuffer, "HELP", index)) sh_run(OP_CODE_HLP);
   else if (!strncmp(kbuffer, "UPTIME", index)) sh_run(OP_CODE_UPT);
+  else if (!strncmp(kbuffer, "CHLOG", index)) sh_run(OP_CODE_CHL);
 
   else {
     printf("Unknown command: ");
     terminal_write(kbuffer, index);
-    putchar('\n');
+    printf("\n");
   }
+  history_index+= tmp;
+  if ((strncmp("", kbuffer, index) != 0) && (strncmp(previous_command, kbuffer, index) != 0)) {
+    strncpy(commands_history[history_index], kbuffer, index);
+    history_index++;
+    history_lenght++;
+  }
+
   index = 0;
+  tmp = 0;
   printf("MaurOS > ");
 }
 
@@ -275,7 +289,62 @@ void cli_keyboard_handler() {
           kbuffer[index] = ';';
           index++;
           break;
+        case 0x48:
+          if (history_index > 0) {
+            --history_index;
+            tmp++;
+            for (size_t i = 0; i < index; i++) putchar('\b');
+            printf(commands_history[history_index]);
+            index = strlen(commands_history[history_index]);
+            strncpy(kbuffer, commands_history[history_index], index);
+          }
+
+          break;
+        case 0x50:
+          if (history_index < history_lenght) {
+            ++history_index;
+            tmp--;
+            for(size_t i = 0; i < index; i++) putchar('\b');
+            printf(commands_history[history_index]);
+            index = strlen(commands_history[history_index]);
+            strncpy(kbuffer, commands_history[history_index], index);
+          }
+          break;
+        case 0x0F:
+          if (!strncmp(kbuffer, "U", 1)) {
+            for (size_t i = 0; i < index; i++) putchar('\b');
+            printf("UPTIME");
+            strcpy(kbuffer, "UPTIME");
+            index = strlen("UPTIME");
+          }
+          else if (!strncmp(kbuffer, "V", 1)) {
+            for (size_t i = 0; i < index; i++) putchar('\b');
+            printf("VER");
+            strcpy(kbuffer, "VER");
+            index = strlen("VER");
+          }
+          else if (!strncmp(kbuffer, "CL", 2)) {
+            for (size_t i = 0; i < index; i++) putchar('\b');
+            printf("CLEAR");
+            strcpy(kbuffer, "CLEAR");
+            index = strlen("CLEAR");
+          }
+          else if (!strncmp(kbuffer, "H", 1)) {
+            for (size_t i = 0; i < index; i++) putchar('\b');
+            printf("HELP");
+            strcpy(kbuffer, "HELP");
+            index = strlen("HELP");
+          }
+          else if (!strncmp(kbuffer, "CH", 2)) {
+            for (size_t i = 0; i < index; i++) putchar('\b');
+            printf("CHLOG");
+            strcpy(kbuffer, "CHLOG");
+            index = strlen("CHLOG");
+          }
+
+          break;
         default:
+          //monitor_write_hex(scancode);
           break;
     }
 }

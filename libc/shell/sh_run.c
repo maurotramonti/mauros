@@ -7,11 +7,18 @@
 #include <stdint.h>
 #include <sys/handler.h>
 
-const char* version_string = "OS Info: MaurOS alpha, build 04.01.2021";
-const char* help_string = "\nCLEAR:        CLEARS THE SCREEN\n"
-                          "HELP:         SHOWS THIS HELP\n"
-                          "UPTIME:       SHOWS SYSTEM UPTIME"
-                          "VER:          SHOWS VERSION NUMBER AND DATE\n";
+const char* version_string = "OS Info: MaurOS  v5.1.21-alpha";
+const char* help_string = "\nCHLOG:        CHANGES SINCE LAST VERSION"
+                          "\nCLEAR:        CLEARS THE SCREEN"
+                          "\nHELP:         SHOWS THIS HELP"
+                          "\nUPTIME:       SHOWS SYSTEM UPTIME"
+                          "\nVER:          SHOWS VERSION NUMBER AND DATE\n";
+
+const char* changes_string = "Changes since v5.1.21-alpha:\n"
+                             " \a Added support to command completion\n"
+                             " \a Added support to shell history\n"
+                             " \a Removed useless debug info\n"
+                             " \a New functions: strncpy(), put_int(), terminal_writestring_color()\n";
 
 unsigned int ticks, seconds;
 
@@ -30,6 +37,9 @@ void sh_run(int opcode) {
       ticks = timer_get_ticks();
       seconds = ticks / 50;
       printf("System uptime: %s\n", itoa(seconds));
+      break;
+    case OP_CODE_CHL:
+      printf("%s\n", changes_string);
       break;
     default:
       put_fail("OS Error: undefined opcode: ");
