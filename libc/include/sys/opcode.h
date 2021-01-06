@@ -6,5 +6,8 @@
 #define OP_CODE_HLP 2
 #define OP_CODE_UPT 3
 #define OP_CODE_CHL 4
+#define OP_CODE_SHD 5
+#define OP_CODE_RBT 6
+#define OP_CODE_ADD 7
 
 #endif

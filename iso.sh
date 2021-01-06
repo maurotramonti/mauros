@@ -9,8 +9,13 @@ mkdir -p isodir/modules
 
 cp sysroot/boot/mauros.kernel isodir/boot/mauros.kernel
 cat > isodir/boot/grub/grub.cfg << EOF
-menuentry "MaurOS" {
+
+set default=0
+set timeout=1
+
+menuentry "MaurOS v6.1.21-alpha" {
 	multiboot /boot/mauros.kernel
+	boot
 }
 EOF
 grub-mkrescue -o mauros.iso isodir

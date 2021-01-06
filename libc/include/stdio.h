@@ -14,8 +14,11 @@ int printf(const char* __restrict, ...);
 int putchar(int);
 int puts(const char*);
 
+void readline(const char* msg, char* var);
+
 uint8_t inb (uint16_t port);
 void outb (uint16_t port, uint8_t data);
+void outw (uint16_t port, uint16_t data);
 
 #ifdef __cplusplus
 }

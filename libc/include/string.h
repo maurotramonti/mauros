@@ -17,6 +17,8 @@ void* memset(void*, int, size_t);
 
 size_t strlen(const char*);
 
+void strempty(char* str);
+
 char* itoa(uint32_t n);
 
 char* strcpy(char* dest, const char* src);

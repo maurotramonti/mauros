@@ -41,7 +41,7 @@ static void scroll() {
        // Move the current text chunk that makes up the screen
        // back in the buffer by a line
        int i;
-       for (i = 0; i < 24*80; i++)
+       for (i = 6*80; i < 24*80; i++)
        {
            terminal_buffer[i] = terminal_buffer[i+80];
        }
