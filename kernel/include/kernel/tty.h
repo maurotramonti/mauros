@@ -8,6 +8,7 @@
 
 size_t terminal_get_coord(int coord);
 void terminal_set_coord(int x, int y);
+void terminal_clear(size_t start_y);
 
 void terminal_initialize(void);
 void terminal_putchar(char c);

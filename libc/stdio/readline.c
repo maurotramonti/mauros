@@ -8,12 +8,18 @@ static char buffer[256];
 static size_t index = 0;
 
 static char *variabile;
+static isr_t callback;
+
+static bool has_to_callback;
 
 static void enter() {
-  strncpy(variabile, buffer, index);
+  strempty(variabile);
+  strncpy(variabile, buffer,  index - 1);
   index = 0;
   register_interrupt_handler(IRQ1, cli_keyboard_handler);
-  printf("\n MaurOS > ");
+  if (has_to_callback) callback(0);
+  else printf("\n MaurOS > ");
+
 }
 
 static void readline_handler() {
@@ -271,8 +277,11 @@ static void readline_handler() {
 }
 
 
-void readline(const char* msg, char* var) {
+void readline(const char* msg, char* var, bool has_callback, isr_t back_function) {
+  index = 0;
   register_interrupt_handler(IRQ1, readline_handler);
   printf("\n %s ", msg);
   variabile = var;
+  callback = back_function;
+  has_to_callback = has_callback;
 }

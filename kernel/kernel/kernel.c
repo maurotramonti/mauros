@@ -27,7 +27,7 @@ void kernel_main() {
 	isr_install();
 	irq_install();
 	printf(mauros_title);
-	add_version_info(6, 1, 21);
+	add_version_info(7, 1, 21);
 	printf("\n MaurOS > ");
 
 }

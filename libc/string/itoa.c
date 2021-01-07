@@ -1,6 +1,6 @@
 #include <string.h>
 
-char* itoa(uint32_t n) {
+char* itoa(int n) {
 
     if (n == 0)
     {

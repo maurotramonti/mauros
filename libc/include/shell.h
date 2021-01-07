@@ -2,5 +2,7 @@
 #define _SHELL_H 1
 
 void sh_run(int opcode);
+void add();
+//void sub();
 
 #endif

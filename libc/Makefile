@@ -48,6 +48,7 @@ string/strcpy.o \
 string/strncpy.o \
 string/strempty.o \
 string/itoa.o \
+string/atoi.o \
 cursor/enable_cursor.o \
 cursor/disable_cursor.o \
 cursor/update_cursor.o \
@@ -55,6 +56,7 @@ keyboard/init_keyboard.o \
 sys/handler/cli_keyboard_handler.o \
 sys/handler/timer_handler.o \
 shell/sh_run.o \
+shell/add.o \
 debug/put_ok.o \
 debug/put_fail.o \
 debug/put_info.o \
@@ -62,6 +64,8 @@ debug/put_dbg.o \
 debug/put_int.o \
 power/reboot.o \
 time/seconds_to_minutes.o \
+math/pwr.o \
+math/avrg.o \
 
 HOSTEDOBJS=\
 $(ARCH_HOSTEDOBJS) \

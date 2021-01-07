@@ -3,13 +3,14 @@
 #include <kernel/tty.h>
 #include <string.h>
 #include <stdio.h>
-#include <debug.h>
 #include <sys/handler.h>
 #include <power.h>
 #include <time.h>
 
-const char* version_string = "OS Info: MaurOS v6.1.21-alpha";
-const char* help_string = "\n CHLOG:        changes since last version"
+const char* version_string = "OS Info: MaurOS v7.1.21-alpha";
+const char* help_string = "\n ADD:          print the sum of two addends"
+                          //"\n SUB:          print the difference between two numbers"
+                          "\n CHLOG:        changes since last version"
                           "\n CLEAR:        clear the screen"
                           "\n HELP:         show this help"
                           "\n REBOOT:       reboot the system"
@@ -17,13 +18,10 @@ const char* help_string = "\n CHLOG:        changes since last version"
                           "\n UPTIME:       show system uptime (in seconds)"
                           "\n VER:          show version number\n";
 
-const char* changes_string = "\n Changes since v6.1.21-alpha:\n"
-                             "  \a Improved support to command completion\n"
-                             "  \a Improved support to shell history\n"
-                             "  \a Bugfixes\n"
-                             "  \a Improved shell\n"
-                             "  \a New readline() function!\n"
-                             "  \a Power functions: reboot() and shutdown (only in QEMU at this point)\n";
+const char* changes_string = "\n Changes since v7.1.21-alpha:\n"
+                             "  \a Math commandd: ADD\n"
+                             "  \a Math function: avrg()\n"
+                             "  \a Shell bugfixes\n";
 
 
 
@@ -34,7 +32,8 @@ void sh_run(int opcode) {
       printf(" %s\n MaurOS > ", version_string);
       break;
     case OP_CODE_CLS:
-      terminal_initialize();
+      terminal_clear(6);
+      printf(" MaurOS > ");
       break;
     case OP_CODE_HLP:
       printf(" %s\n MaurOS > ", help_string);
@@ -56,6 +55,10 @@ void sh_run(int opcode) {
       outw(0x604, 0x2000); /* NOTE: Only works in QEMU */
       break;
     case OP_CODE_ADD:
+      add();
+      break;
+    case OP_CODE_SUB:
+      //sub();
       break;
     default:
       put_fail(" OS Error: undefined opcode: ");

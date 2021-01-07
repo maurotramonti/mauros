@@ -19,7 +19,8 @@ size_t strlen(const char*);
 
 void strempty(char* str);
 
-char* itoa(uint32_t n);
+char* itoa(int n);
+uint32_t atoi(const char*);
 
 char* strcpy(char* dest, const char* src);
 char* strncpy(char* dest, const char* src, size_t n);

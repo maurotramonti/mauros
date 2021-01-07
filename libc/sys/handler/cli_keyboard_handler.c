@@ -1,20 +1,18 @@
 #include <sys/handler.h>
 #include <stdio.h>
 #include <kernel/tty.h>
-#include <kernel/isr.h>
 #include <sys/opcode.h>
 #include <shell.h>
 #include <string.h>
 
 static char kbuffer[256];
 static char commands_history[128][32];
-static size_t index = 0;
-static size_t spaces = 0;
-static size_t history_index = 0;
-static size_t history_lenght = 0;
-static size_t tmp = 0;
-static char *readline_test;
 static char previous_command[32];
+static size_t index = 0, spaces = 0, history_index = 0, history_lenght = 0, tmp = 0;
+
+static void cb() {
+  printf("\n Ho finito di aspettare!\n MaurOS > ");
+}
 
 static void enter() {
   putchar('\n');
@@ -25,26 +23,22 @@ static void enter() {
   else if (!strncmp(kbuffer, "CHLOG", index - spaces)) sh_run(OP_CODE_CHL);
   else if (!strncmp(kbuffer, "SHUTDOWN", index - spaces)) sh_run(OP_CODE_SHD);
   else if (!strncmp(kbuffer, "REBOOT", index - spaces)) sh_run(OP_CODE_RBT);
-  else if (!strncmp(kbuffer, "READLINE", index - spaces)) readline("Insert a message:", readline_test);
-  else if (!strncmp(kbuffer, "PRINT", index - spaces)) {
+  else if (!strncmp(kbuffer, "ADD", index - spaces)) sh_run(OP_CODE_ADD);
+  //else if (!strncmp(kbuffer, "SUB", index - spaces)) sh_run(OP_CODE_SUB);
 
-    printf(" Last readed variable: %s\n MaurOS > ", readline_test);
-  }
   else {
     printf(" Unknown command: ");
     terminal_write(kbuffer, index);
     printf("\n MaurOS > ");
   }
   history_index += tmp;
-  if ((strncmp(" ", kbuffer, index) != 0) && (strncmp(previous_command, kbuffer, index) != 0)) {
+  if ((strncmp("                         ", kbuffer, index) != 0) && (strncmp(previous_command, kbuffer, index) != 0)) {
     strncpy(commands_history[history_index], kbuffer, index);
     history_index++;
     history_lenght++;
   }
 
-  spaces = 0;
-  index = 0;
-  tmp = 0;
+  spaces = 0, index = 0, tmp = 0;
   strempty(kbuffer);
 }
 
@@ -363,6 +357,12 @@ void cli_keyboard_handler() {
             printf("REBOOT");
             strcpy(kbuffer, "REBOOT");
             index = strlen("REBOOT");
+          }
+          else if (!strncmp(kbuffer, "A", 1) || !strncmp(kbuffer, "AD", 2)) {
+            for (size_t i = 0; i < index; i++) putchar('\b');
+            printf("ADD");
+            strcpy(kbuffer, "ADD");
+            index = strlen("ADD");
           }
 
           break;

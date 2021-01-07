@@ -9,5 +9,6 @@
 #define OP_CODE_SHD 5
 #define OP_CODE_RBT 6
 #define OP_CODE_ADD 7
+#define OP_CODE_SUB 8
 
 #endif

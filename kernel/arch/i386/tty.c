@@ -36,6 +36,17 @@ void terminal_initialize(void) {
 	}
 }
 
+void terminal_clear(size_t start_y) {
+	for (size_t y = start_y; y < VGA_HEIGHT; y++) {
+		for (size_t x = 0; x < VGA_WIDTH; x++) {
+			const size_t index = y * VGA_WIDTH + x;
+			terminal_buffer[index] = vga_entry(' ', terminal_color);
+		}
+	}
+	terminal_column = 0;
+	terminal_row = 6;
+}
+
 static void scroll() {
 
        // Move the current text chunk that makes up the screen

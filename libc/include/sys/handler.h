@@ -5,6 +5,7 @@
 
 void cli_keyboard_handler();
 
+void add_run();
 
 void timer_handler();
 uint32_t timer_get_ticks();
